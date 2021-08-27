@@ -3,7 +3,7 @@
   <div class="home">
     <Navbar/>
     <v-container class="flex justify-center">
-      <v-card class="pa-4 white">
+      <v-card class="pa-4 text-white" dark>
       <p>123</p>
       </v-card>
     </v-container>
