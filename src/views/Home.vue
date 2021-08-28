@@ -23,7 +23,8 @@ export default {
     }
   },
   components: {
-      Navbar
+      Navbar,
+
     // Member
 
   },
