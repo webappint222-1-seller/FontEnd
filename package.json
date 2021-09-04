@@ -5,7 +5,9 @@
   "scripts": {
     "serve": "vue-cli-service serve",
     "build": "vue-cli-service build",
-    "lint": "vue-cli-service lint"
+    "lint": "vue-cli-service lint",
+    "backend": "json-server --watch db.json --port 5000",
+    "pbackend": "json-server --watch pdb.json --port 5001"
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.2",
@@ -13,8 +15,10 @@
     "core-js": "^3.6.5",
     "postcss": "^7",
     "tailwindcss": "npm:@tailwindcss/postcss7-compat@^2.0.2",
+    "vee-validate": "^3.4.12",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
+    "vuelidate": "^0.7.6",
     "vuetify": "^2.4.0"
   },
   "devDependencies": {

@@ -6,13 +6,16 @@
           <v-toolbar-title class="headline">
             <span class="text-lightpink">uta STORE</span>
           </v-toolbar-title>
-          <v-spacer></v-spacer>
-  
-          <!-- <v-btn flat href="https://google.com" target="_blank">
-        <span class="mr-2">Google</span>
-      </v-btn>
-          -->
-          <v-btn>
+          <v-spacer></v-spacer>          
+          
+          <v-btn @click="$router.push('/billpage')">
+            <v-icon left>shopping_basket</v-icon>            
+          </v-btn>
+          <v-btn @click="$router.push('/registerpage')">
+            <v-icon left>account_circle</v-icon>
+            <span class="mr-2">create account</span>
+          </v-btn>
+          <v-btn @click="$router.push('/loginpage')">
             <v-icon left>login</v-icon>
             <span class="mr-2">Log In</span>
           </v-btn>
@@ -61,10 +64,9 @@
   </template>
   
   <script>
-  // import HelloWorld from '@/components/HelloWorld.vue'
   
   export default {
-    name: 'Home',
+    name: 'Navbar',
     data() {
       return {
         switchLeftNavi: false,
@@ -74,8 +76,6 @@
       }
     },
     components: {
-  
-      // Member
   
     },
   }
