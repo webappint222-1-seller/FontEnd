@@ -60,24 +60,15 @@
                     ></v-textarea>
                   </validation-provider>
 
-                  <validation-provider
-                    v-slot="{ errors }"
-                    name="Product Image"
-                    rules="required"
-                  >
-                  <v-file-input
-                    
-                    :error-messages="errors"
-                    label="Image Input"
-                    filled
-                    required
-                    single-line
-                    prepend-icon="mdi-camera"
-                    
-                  >
-                  
-                  </v-file-input>
-                  
+                  <validation-provider v-slot="{ errors }" name="Product Image" rules="required">
+                    <v-file-input
+                      :error-messages="errors"
+                      label="Image Input"
+                      filled
+                      required
+                      single-line
+                      prepend-icon="mdi-camera"
+                    ></v-file-input>
                   </validation-provider>
 
                   <v-btn
@@ -95,7 +86,7 @@
       </v-flex>
     </v-container>
     <!-- ----------------------------------------------------------------------------------------------------------- -->
-    <!-- Example -->
+    <!-- Dummy -->
     <v-container class="flex mb-40">
       <v-layout row wrap>
         <v-flex xs12 sm12 md4 lg4 wrap v-for="p in products" :key="p.title" class="justify-center">
@@ -112,13 +103,41 @@
               </ul>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="#FFB6C1">
+              <v-btn @click.prevent="addToCart" type="submit" v-model="addCart" color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
       </v-layout>
+
+      <v-card flat class="w-auto h-auto pa-2" color="black">
+        <span class="text-lg white--text">CART</span>
+        <v-layout column>
+          <v-flex xs12 sm12 md4 lg1 wrap v-for="cInfo in cartInfo" :key="cInfo.id" class>
+            <v-card dark flat class="w-80 h-auto my-5" color="#C0C0C0">
+              <v-card-text class="justify-center text-sm break-words white--text">
+                <span>{{ cInfo.name }}</span>
+              </v-card-text>
+              <v-card-actions class="justify-start">
+                <v-btn color="red darken-4">
+                  <v-icon>delete</v-icon>
+                </v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-flex>
+        </v-layout>
+        <v-layout class= "justify-center mt-4">
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn @click="$router.push('/billpage')" v-bind="attrs" v-on="on" color="#FFB6C1" dark>
+              <v-icon>shopping_basket</v-icon>
+            </v-btn>
+          </template>
+          <span>Check Out</span>
+        </v-tooltip>
+        </v-layout>
+      </v-card>
     </v-container>
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <v-container class="flex mb-40">
@@ -159,7 +178,7 @@
           </v-card>
         </v-flex>
       </v-layout>
-    </v-container>    
+    </v-container>
     <Footer></Footer>
   </div>
 </template>
@@ -204,12 +223,14 @@ export default {
       bandForm: '',
       priceForm: '',
       desForm: '',
-      
+      addCart: '',
+      cartInfo: [],
       productInfo: [],
       inEditMode: false,
       editId: '',
       i: 'https://files.catbox.moe/vq3v5e.png',
-      url: 'http://localhost:5001/productInfo'
+      url: 'http://localhost:5001/productInfo',
+      carturl: 'http://localhost:5002/cartInfo'
 
     }
 
@@ -285,7 +306,6 @@ export default {
           })
         }
 
-
       }
       this.nameForm = '',
         this.bandForm = '',
@@ -318,6 +338,24 @@ export default {
       catch (error) { console.log(`save failed: ${error}`) }
     },
 
+    async addToCart(newCartForm) {
+      try {
+        const res = await fetch(this.carturl, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            addcart: newCartForm.addCart
+
+          })
+        })
+        const data = await res.json()
+        this.cartInfo = [...this.cartInfo, data]
+      }
+      catch (error) { console.log(`addrocart failed: ${error}`) }
+    },
+
     // GET
     async getProductForm() {
       try {
@@ -325,7 +363,17 @@ export default {
         const getdata = await res.json()
         return getdata
       }
-      catch (error) { console.log(`get failed: ${error}`) }
+      catch (error) { console.log(`get product failed: ${error}`) }
+    },
+
+    async getCartForm() {
+      try {
+        const res = await fetch(this.carturl)
+        const getcartdata = await res.json()
+        return getcartdata
+
+      }
+      catch (error) { console.log(`get cart failed: ${error}`) }
     },
 
     // DELETE
@@ -400,6 +448,7 @@ export default {
   // GET-2
   async created() {
     this.productInfo = await this.getProductForm()
+    this.cartInfo = await this.getCartForm()
 
   }
 
