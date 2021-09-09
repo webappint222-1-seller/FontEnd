@@ -3,12 +3,12 @@
     <Navbar />
     <v-container class="flex">
       <v-flex xs12 sm12 md12 lg12 class="justify-center">
-        <v-btn dark v-show="!addedit" v-on:click="toggleDone()" class="mt-4">
+        <v-btn dark v-show="!addedit" v-on:click="toggleDone()" class="mt-10">
           <span>add / edit</span>
         </v-btn>
 
-        <div v-show="addedit" class="justify-end">
-          <v-btn dark v-on:click="toggleDone()" class="mt-4 ml-28">
+        <div v-show="addedit" class="justify-center">
+          <v-btn dark v-on:click="toggleDone()" class="mt-10 ml-28">
             <span>cancel</span>
           </v-btn>
           <v-card dark class="w-80 h-auto mt-10">
@@ -89,7 +89,7 @@
     <!-- Dummy -->
     <v-container class="flex mb-40">
       <v-layout row wrap>
-        <v-flex xs12 sm12 md4 lg4 wrap v-for="p in products" :key="p.title" class="justify-center">
+        <v-flex xs12 sm6 md6 lg6 wrap v-for="p in products" :key="p.title" class="justify-center">
           <v-card dark flat class="pa-2 w-64 h-auto my-10">
             <v-responsive>
               <img :src="p.pic" class="w-60 h-60" />
@@ -111,33 +111,46 @@
         </v-flex>
       </v-layout>
 
-      <v-card flat class="w-auto h-auto pa-2" color="black">
-        <span class="text-lg white--text">CART</span>
-        <v-layout column>
-          <v-flex xs12 sm12 md4 lg1 wrap v-for="cInfo in cartInfo" :key="cInfo.id" class>
-            <v-card dark flat class="w-80 h-auto my-5" color="#C0C0C0">
-              <v-card-text class="justify-center text-sm break-words white--text">
-                <span>{{ cInfo.name }}</span>
-              </v-card-text>
-              <v-card-actions class="justify-start">
-                <v-btn color="red darken-4">
-                  <v-icon>delete</v-icon>
-                </v-btn>
-              </v-card-actions>
-            </v-card>
-          </v-flex>
-        </v-layout>
-        <v-layout class= "justify-center mt-4">
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on, attrs }">
-            <v-btn @click="$router.push('/billpage')" v-bind="attrs" v-on="on" color="#FFB6C1" dark>
-              <v-icon>shopping_basket</v-icon>
-            </v-btn>
-          </template>
-          <span>Check Out</span>
-        </v-tooltip>
-        </v-layout>
-      </v-card>
+      <v-layout column wrap>
+        <v-flex xs12 sm6 md6 lg6 wrap class="justify-center hidden-xs-only">
+          <v-card flat class="pa-4 overflow-y-scroll" color="black" width="auto" height="400">
+            <span class="text-lg white--text">CART</span>
+
+            <div v-for="cInfo in cartInfo" :key="cInfo.id">
+              <v-card dark flat class="w-auto h-auto my-5" color="#C0C0C0">
+                <v-layout wrap>
+                  <v-card-text class="justify-start text-sm w-40 truncate white--text">
+                    <span>{{ cInfo.name }}</span>
+                  </v-card-text>
+
+                  <v-card-actions>
+                    <v-btn @click="deleteCart(cInfo.id)" color="red darken-4">
+                      <v-icon>delete</v-icon>
+                    </v-btn>
+                  </v-card-actions>
+                </v-layout>
+              </v-card>
+            </div>
+
+            <v-layout class="justify-center mt-4">
+              <v-tooltip bottom>
+                <template v-slot:activator="{ on, attrs }">
+                  <v-btn
+                    @click="$router.push('/billpage')"
+                    v-bind="attrs"
+                    v-on="on"
+                    color="#FFB6C1"
+                    dark
+                  >
+                    <v-icon>shopping_basket</v-icon>
+                  </v-btn>
+                </template>
+                <span>Check Out</span>
+              </v-tooltip>
+            </v-layout>
+          </v-card>
+        </v-flex>
+      </v-layout>
     </v-container>
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <v-container class="flex mb-40">
@@ -145,8 +158,8 @@
         <v-flex
           xs12
           sm12
-          md4
-          lg4
+          md6
+          lg6
           wrap
           v-for="uta in productInfo"
           :key="uta.id"
@@ -383,15 +396,32 @@ export default {
           method: 'DELETE'
         })
         this.productInfo = this.productInfo.filter(uta => uta.id !== deleteId)
-        this.reload()
+        this.reloadProduct()
       }
       catch (error) {
         console.log(`delete failed: ${error}`)
       }
     },
 
-    async reload() {
+    async deleteCart(deleteCartId) {
+      try {
+        await fetch(`${this.carturl}/${deleteCartId}`, {
+          method: 'DELETE'
+        })
+        this.cartInfo = this.cartInfo.filter(cInfo => cInfo.id !== deleteCartId)
+        this.reloadCart()
+      }
+      catch (error) {
+        console.log(`delete cart failed: ${error}`)
+      }
+    },
+  
+    async reloadProduct() {
       this.productInfo = await this.getProductForm()
+    },
+
+    async reloadCart() {
+      this.cartInfo = await this.getCartForm()
     },
 
     // EDIT

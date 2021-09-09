@@ -10,13 +10,13 @@
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <v-btn @click="$router.push('/billpage')">
+        <v-btn depressed @click="$router.push('/billpage')">
           <v-icon left>shopping_basket</v-icon>
         </v-btn>
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn @click="$router.push('/registerpage')" v-bind="attrs" v-on="on">
+            <v-btn depressed @click="$router.push('/registerpage')" v-bind="attrs" v-on="on">
               <v-icon left>account_circle</v-icon>
             </v-btn>
           </template>
@@ -25,7 +25,7 @@
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
-            <v-btn @click="$router.push('/loginpage')" v-bind="attrs" v-on="on">
+            <v-btn depressed @click="$router.push('/loginpage')" v-bind="attrs" v-on="on">
               <v-icon left>login</v-icon>
             </v-btn>
           </template>
