@@ -178,7 +178,7 @@
               </ul>
             </v-card-text>
             <v-card-actions>
-              <v-btn color="#FFB6C1">
+              <v-btn @click="productInCart(uta)" color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
               <v-btn @click="showProduct(uta)" color="yellow darken-4">
@@ -331,6 +331,42 @@ export default {
     },
 
     // POST
+    productInCart(utaInfo) {
+      this.editId = utaInfo.id
+      this.nameForm = utaInfo.name
+      this.bandForm = utaInfo.band
+      this.priceForm = utaInfo.price
+      this.desForm = utaInfo.des
+      this.addNewProductToCart({
+            id: this.editid,
+            name: this.nameForm,
+            band: this.bandForm,
+            price: this.priceForm,
+            des: this.desForm
+          })
+    },
+
+    async addNewProductToCart(newProductToCart) {
+      try {
+        const res = await fetch(this.carturl, {
+          method: 'POST',
+          headers: {
+            'content-type': 'application/json'
+          },
+          body: JSON.stringify({
+            id: newProductToCart.id,
+            name: newProductToCart.name,
+            band: newProductToCart.band,
+            price: newProductToCart.price,
+            des: newProductToCart.des
+          })
+        })
+        const data = await res.json()
+        this.cartInfo = [...this.cartInfo, data]
+      }
+      catch (error) { console.log(`save failed: ${error}`) }
+    },
+
     async addNewProductForm(newProductForm) {
       try {
         const res = await fetch(this.url, {
