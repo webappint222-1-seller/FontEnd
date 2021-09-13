@@ -68,9 +68,16 @@
                       required
                       single-line
                       prepend-icon="mdi-camera"
+                      type="file"
+                      @change="uploadImage"
+                      v-model="fileForm"
                     ></v-file-input>
+                    <img
+                      :src="i"
+                      class="h-20 w-40 object-cover border-2 border-black rounded my-4 hidden"
+                    />
                   </validation-provider>
-
+                  <!-- @change="uploadImage" -->
                   <v-btn
                     class="mr-4"
                     @click.prevent="submitProductForm"
@@ -89,12 +96,12 @@
     <!-- Dummy -->
     <v-container class="flex mb-40">
       <v-layout row wrap>
-        <v-flex xs12 sm6 md6 lg6 wrap v-for="p in products" :key="p.title" class="justify-center">
-          <v-card dark flat class="pa-2 w-64 h-auto my-10">
+        <v-flex xs12 sm6 md6 lg3 wrap v-for="p in products" :key="p.title" class="justify-center">
+          <v-card dark flat class="pa-2 w-44 h-auto my-10">
             <v-responsive>
-              <img :src="p.pic" class="w-60 h-60" />
+              <img :src="p.pic" class="w-40 h-40" />
             </v-responsive>
-            <v-card-text class="justify-center text-sm break-words white--text">
+            <v-card-text class="justify-center text-xs break-words white--text">
               <ul>
                 <li>{{ p.title }}</li>
                 <li class="pt-2">{{ p.band }}</li>
@@ -103,16 +110,51 @@
               </ul>
             </v-card-text>
             <v-card-actions>
-              <v-btn @click.prevent="addToCart" type="submit" v-model="addCart" color="#FFB6C1">
+              <v-btn @click="dummyProductInCart(p)" color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
             </v-card-actions>
           </v-card>
         </v-flex>
       </v-layout>
+    </v-container>
+    <!-- ---------------------------------------------------------------------------------------------------------- -->
+    <v-container class="flex mb-40">
+      <v-layout row wrap>
+        <v-flex xs12 sm6 md6 lg3 wrap v-for="uta in productInfo" :key="uta.id" justify-end>
+          <v-card dark flat class="pa-2 w-44 h-auto my-10">
+            <v-responsive>
+              <img :src="uta.file" class="w-40 h-40" />
+            </v-responsive>
+            <v-card-text class="justify-center text-xs break-words white--text">
+              <ul>
+                <li>{{ uta.name }}</li>
+                <li class="pt-2">{{ uta.band }}</li>
+                <li class="pt-2">{{ uta.price }}yen</li>
+                <li class="pt-2">{{ uta.des }}</li>
+              </ul>
+            </v-card-text>
+          
+            <v-card-actions class="justify-center">
+              <v-btn @click="productInCart(uta)" color="#FFB6C1" small justify-end>
+                <v-icon small>shopping_cart</v-icon>
+              </v-btn>
+            </v-card-actions>
 
-      <v-layout column wrap>
-        <v-flex xs12 sm6 md6 lg6 wrap class="justify-center hidden-xs-only">
+            <v-card-actions class= "justify-center">
+              <v-btn @click="showProduct(uta)" color="yellow darken-4" small>
+                <v-icon small>edit</v-icon>
+              </v-btn>
+              <v-btn @click="deleteProduct(uta.id)" color="red darken-4" small>
+                <v-icon small>delete</v-icon>
+              </v-btn>
+            </v-card-actions>
+          </v-card>
+        </v-flex>
+      </v-layout>
+
+      <v-layout column wrap mt-8>
+        <v-flex xs12 sm6 md6 lg12 wrap class="justify-center hidden-xs-only">
           <v-card flat class="pa-4 overflow-y-scroll" color="black" width="auto" height="400">
             <span class="text-lg white--text">CART</span>
 
@@ -152,46 +194,6 @@
         </v-flex>
       </v-layout>
     </v-container>
-    <!-- ---------------------------------------------------------------------------------------------------------- -->
-    <v-container class="flex mb-40">
-      <v-layout row wrap>
-        <v-flex
-          xs12
-          sm12
-          md6
-          lg6
-          wrap
-          v-for="uta in productInfo"
-          :key="uta.id"
-          class="justify-center"
-        >
-          <v-card dark flat class="pa-2 w-64 h-auto my-10">
-            <v-responsive>
-              <!-- <img :src="e.pic" class="w-60 h-60" /> -->
-            </v-responsive>
-            <v-card-text class="justify-center text-sm break-words white--text">
-              <ul>
-                <li>{{ uta.name }}</li>
-                <li class="pt-2">{{ uta.band }}</li>
-                <li class="pt-2">{{ uta.price }}yen</li>
-                <li class="pt-2">{{ uta.des }}</li>
-              </ul>
-            </v-card-text>
-            <v-card-actions>
-              <v-btn color="#FFB6C1">
-                <v-icon>shopping_cart</v-icon>
-              </v-btn>
-              <v-btn @click="showProduct(uta)" color="yellow darken-4">
-                <v-icon>edit</v-icon>
-              </v-btn>
-              <v-btn @click="deleteProduct(uta.id)" color="red darken-4">
-                <v-icon>delete</v-icon>
-              </v-btn>
-            </v-card-actions>
-          </v-card>
-        </v-flex>
-      </v-layout>
-    </v-container>
     <Footer></Footer>
   </div>
 </template>
@@ -225,10 +227,10 @@ export default {
   data() {
     return {
       products: [
-        { title: "Sakaseya Sakase [Regular Edition]", band: "EGOIST", price: "1204yen", des: "Much anticipated new release featured as main theme to hit anime's theatrical release.", pic: "VVCL-1443.jpg" },
-        { title: "Greatest Hits 2011-2017 Alter Ego [Regular Edition]", band: "EGOIST", price: "2778yen", des: "First greatest hits album of EGOIST featuring 15 titles (13 from anime series) in remastered edition.", pic: "VVCL-1155.jpg" },
-        { title: "Kabaneri of the Iron Fortress [Regular Edition]", band: "EGOIST", price: "1204yen", des: "EGOIST brings the seventh single. The title song is an intro theme for the TV anime series Kabaneri of the Iron Fortress.", pic: "SRCL-9070.jpg" },
-        { title: "RELOADED [Regular Edition]", band: "EGOIST", price: "1300yen", des: "New single release from Egoist is used as main theme for Project Itoh anime.", pic: "SRCL-8927.jpg" },
+        { title: "Sakaseya Sakase [Regular Edition]", band: "EGOIST", price: "1204yen", des: "Much anticipated new release featured as main theme to hit anime's theatrical release.", pic: "VVCL-1443.jpg", id: 1 },
+        { title: "Greatest Hits 2011-2017 Alter Ego [Regular Edition]", band: "EGOIST", price: "2778yen", des: "First greatest hits album of EGOIST featuring 15 titles (13 from anime series) in remastered edition.", pic: "VVCL-1155.jpg", id: 2 },
+        { title: "Kabaneri of the Iron Fortress [Regular Edition]", band: "EGOIST", price: "1204yen", des: "EGOIST brings the seventh single. The title song is an intro theme for the TV anime series Kabaneri of the Iron Fortress.", pic: "SRCL-9070.jpg", id: 3 },
+        { title: "RELOADED [Regular Edition]", band: "EGOIST", price: "1300yen", des: "New single release from Egoist is used as main theme for Project Itoh anime.", pic: "SRCL-8927.jpg", id: 4 },
       ],
       addedit: false,
       cancel: false,
@@ -236,11 +238,14 @@ export default {
       bandForm: '',
       priceForm: '',
       desForm: '',
+      fileForm: null,
       addCart: '',
       cartInfo: [],
       productInfo: [],
       inEditMode: false,
+      addCartMode: false,
       editId: '',
+      addCartId: '',
       i: 'https://files.catbox.moe/vq3v5e.png',
       url: 'http://localhost:5001/productInfo',
       carturl: 'http://localhost:5002/cartInfo'
@@ -254,7 +259,6 @@ export default {
     Footer,
     ValidationProvider,
     ValidationObserver,
-    // Member
 
   },
 
@@ -277,22 +281,39 @@ export default {
 
     },
 
+    uploadImage(p) {
+      const varFile = p.target.files[0]
+      //console.log(this.fileForm)
+      if (varFile.type.includes('image')) {
+        const readImage = new FileReader()
+        readImage.onload = (e) => {
+          this.i = e.target.result
+        }
+        this.fileForm = varFile
+        readImage.readAsDataURL(varFile)
+      }
+    },
+
     submitProductForm() {
       this.$refs.observer.validate()
       this.nameErrors = this.nameForm === ''
       this.bandErrors = this.bandForm === ''
       this.priceErrors = this.priceForm === ''
       this.desErrors = this.desForm === ''
+      this.fileErrors = this.fileForm === null
+
 
       console.log(`productName: ${this.nameForm}`)
       console.log(`bandName: ${this.bandForm}`)
       console.log(`productPrice: ${this.priceForm}`)
       console.log(`productDes: ${this.desForm}`)
+      console.log(`image: ${this.fileForm}`)
 
       if (this.Formname !== '' &&
         this.bandForm !== '' &&
         this.priceForm !== '' &&
-        this.desForm !== '') {
+        this.desForm !== '' &&
+        this.fileForm !== null) {
         // this.productInfo.push({
         //   name: this.nameForm,
         //   band: this.bandForm,
@@ -315,7 +336,8 @@ export default {
             name: this.nameForm,
             band: this.bandForm,
             price: this.priceForm,
-            des: this.desForm
+            des: this.desForm,
+            file: this.fileForm
           })
         }
 
@@ -342,7 +364,9 @@ export default {
             name: newProductForm.name,
             band: newProductForm.band,
             price: newProductForm.price,
-            des: newProductForm.des
+            des: newProductForm.des,
+            file: newProductForm.file,
+            // path: newProductForm.fileForm.name
           })
         })
         const data = await res.json()
@@ -351,7 +375,59 @@ export default {
       catch (error) { console.log(`save failed: ${error}`) }
     },
 
-    async addToCart(newCartForm) {
+
+    // dummyProductInCart(utaInfo) {
+    //   this.editId = utaInfo.id
+    //   this.nameForm = utaInfo.name
+    //   this.bandForm = utaInfo.band
+    //   this.priceForm = utaInfo.price
+    //   this.desForm = utaInfo.des
+    //   this.addDummyToCart({
+    //     id: this.id,
+    //     name: this.title,
+    //     band: this.band,
+    //     price: this.price,
+    //     des: this.des
+    //   })
+    // },
+
+    // async addDummyToCart(newDummyCartForm) {
+    //   try {
+    //     const res = await fetch(this.carturl, {
+    //       method: 'POST',
+    //       headers: {
+    //         'content-type': 'application/json'
+    //       },
+    //       body: JSON.stringify({
+    //         id: newDummyCartForm.id,
+    //         name: newDummyCartForm.name,
+    //         band: newDummyCartForm.band,
+    //         price: newDummyCartForm.price,
+    //         des: newDummyCartForm.des
+    //       })
+    //     })
+    //     const data = await res.json()
+    //     this.cartInfo = [...this.cartInfo, data]
+    //   }
+    //   catch (error) { console.log(`add dummy failed: ${error}`) }
+    // },
+
+    productInCart(utaInfo) {
+      this.editId = utaInfo.id
+      this.nameForm = utaInfo.name
+      this.bandForm = utaInfo.band
+      this.priceForm = utaInfo.price
+      this.desForm = utaInfo.des
+      this.addNewProductToCart({
+        id: this.editid,
+        name: this.nameForm,
+        band: this.bandForm,
+        price: this.priceForm,
+        des: this.desForm
+      })
+    },
+
+    async addNewProductToCart(newProductToCart) {
       try {
         const res = await fetch(this.carturl, {
           method: 'POST',
@@ -359,14 +435,17 @@ export default {
             'content-type': 'application/json'
           },
           body: JSON.stringify({
-            addcart: newCartForm.addCart
-
+            id: newProductToCart.id,
+            name: newProductToCart.name,
+            band: newProductToCart.band,
+            price: newProductToCart.price,
+            des: newProductToCart.des
           })
         })
         const data = await res.json()
         this.cartInfo = [...this.cartInfo, data]
       }
-      catch (error) { console.log(`addrocart failed: ${error}`) }
+      catch (error) { console.log(`add to cart failed: ${error}`) }
     },
 
     // GET
@@ -415,7 +494,7 @@ export default {
         console.log(`delete cart failed: ${error}`)
       }
     },
-  
+
     async reloadProduct() {
       this.productInfo = await this.getProductForm()
     },
@@ -464,15 +543,11 @@ export default {
         this.bandform = ''
         this.priceForm = ''
         this.desForm = ''
-
-
       }
       catch (error) {
         console.log(`edit failed: ${error}`)
       }
     },
-
-
   },
 
   // GET-2
