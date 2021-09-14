@@ -109,11 +109,31 @@
                 <li class="pt-2">{{ p.des }}</li>
               </ul>
             </v-card-text>
+
+            <v-card-text >
+              <validation-provider
+                v-slot="{ errors }"
+                name="Quantity"
+                rules="required|numeric|max_value:10"
+              >
+                <v-text-field
+                  v-model="quanForm"
+                  :error-messages="errors"
+                  label="Quantity"
+                  required
+                  outlined
+                  text-xs-left
+                  class="text-xs"
+                ></v-text-field>
+              </validation-provider>
+
             <v-card-actions>
               <v-btn @click="dummyProductInCart(p)" color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
             </v-card-actions>
+            </v-card-text>
+
           </v-card>
         </v-flex>
       </v-layout>
@@ -134,14 +154,15 @@
                 <li class="pt-2">{{ uta.des }}</li>
               </ul>
             </v-card-text>
-          
-            <v-card-actions class="justify-center">
-              <v-btn @click="productInCart(uta)" color="#FFB6C1" small justify-end>
-                <v-icon small>shopping_cart</v-icon>
-              </v-btn>
-            </v-card-actions>
 
-            <v-card-actions class= "justify-center">
+            
+              <v-card-actions class="justify-center">
+                <v-btn @click.prevent="productInCart(uta)" color="#FFB6C1" small justify-end>
+                  <v-icon small>shopping_cart</v-icon>
+                </v-btn>
+              </v-card-actions>
+            
+            <v-card-actions class="justify-center">
               <v-btn @click="showProduct(uta)" color="yellow darken-4" small>
                 <v-icon small>edit</v-icon>
               </v-btn>
@@ -202,7 +223,7 @@
 
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
-import { required, max, numeric } from 'vee-validate/dist/rules'
+import { required, max, max_value, numeric } from 'vee-validate/dist/rules'
 import { extend, ValidationObserver, ValidationProvider, setInteractionMode } from 'vee-validate'
 
 setInteractionMode('eager')
@@ -217,6 +238,11 @@ extend('max', {
   message: '{_field_} may not be greater than {length} characters',
 })
 
+extend('max_value', {
+  ...max_value,
+  message: '{_field_} may not be greater than 10 piece',
+})
+
 extend('numeric', {
   ...numeric,
   message: '{_field_} must be number',
@@ -224,6 +250,7 @@ extend('numeric', {
 
 export default {
   name: 'Home',
+  props: [''],
   data() {
     return {
       products: [
@@ -238,6 +265,7 @@ export default {
       bandForm: '',
       priceForm: '',
       desForm: '',
+      quanForm: '',
       fileForm: null,
       addCart: '',
       cartInfo: [],

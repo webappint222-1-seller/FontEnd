@@ -4,15 +4,18 @@
       <v-toolbar dark xs2>
         <v-app-bar-nav-icon @click="switchLeftNavi = !switchLeftNavi"></v-app-bar-nav-icon>
         <v-toolbar-title class="headline">
-          
-          <span @click="$router.push('/')" class="text-lightpink hidden-xs-only">uta STORE</span>
-          
+          <span @click="$router.push('/')" class="text-lightpink hidden-xs-only">utaStore</span>
         </v-toolbar-title>
         <v-spacer></v-spacer>
 
-        <v-btn depressed @click="$router.push('/billpage')">
-          <v-icon left>shopping_basket</v-icon>
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on, attrs }">
+            <v-btn depressed @click="$router.push('/billpage')" v-bind="attrs" v-on="on">
+              <v-icon left>shopping_basket</v-icon>
+            </v-btn>
+          </template>
+          <span>Check Out</span>
+        </v-tooltip>
 
         <v-tooltip bottom>
           <template v-slot:activator="{ on, attrs }">
@@ -53,7 +56,7 @@
                   <v-icon>dashboard</v-icon>
                 </v-list-item-icon>
                 <v-list-item-content>
-                  <v-list-item-title>About</v-list-item-title>
+                  <v-list-item-title>About Us</v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-list-item-group>

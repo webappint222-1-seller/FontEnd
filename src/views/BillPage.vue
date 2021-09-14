@@ -7,11 +7,11 @@
           <v-card flat class="pa-4 mt-10" color="black" width="auto" height="auto">
             <span class="text-lg white--text">SUMMARY</span>
 
-            <!-- <div v-for="cInfo in cartInfo" :key="cInfo.id"> -->
+            <div v-for="cInfo in cartInfo" :key="cInfo.id">
             <v-card dark flat class="w-80 h-auto my-5" color="#C0C0C0">
               <v-layout wrap>
                 <v-card-text class="justify-center text-sm w-40 truncate white--text">
-                  <span class="justify-center">Bill</span>
+                  <span class=""> {{ cInfo.name }}</span>
                 </v-card-text>
 
                 <v-card-actions>
@@ -21,28 +21,27 @@
                 </v-card-actions>
               </v-layout>
             </v-card>
-            <!-- </div> -->
+            </div>
 
             <v-card-text class="text-sm truncate white--text">
               <ul>
                 <li class="mb-2 justify-end">
-                  <span>Total Quantity: Piece</span>
+                  <span>Total Quantity:  Piece</span>
                 </li>
                 <li>
                   <span>Total price: yen</span>
                 </li>
               </ul>
             </v-card-text>
-          </v-card>          
+          </v-card>
         </v-flex>
-         <v-flex xs12 sm12 md12 lg12 class="justify-center">
-        <v-btn no-gutter dark @click="$router.push('/')" class= "mt-10">
+        <v-flex xs12 sm12 md12 lg12 class="justify-center">
+          <v-btn no-gutter dark @click="$router.push('/')" class="mt-10">
             <v-icon left>reply</v-icon>
             <span>BACK TO HOME</span>
-        </v-btn>
-       </v-flex>
+          </v-btn>
+        </v-flex>
       </v-layout>
-      
     </v-container>
   </div>
 </template>
@@ -55,13 +54,15 @@ export default {
   name: 'Bill',
   data() {
     return {
-
+      cartInfo: []
     }
   },
   components: {
     Navbar
 
-
   },
+  methods: {
+
+  }
 }
 </script>

@@ -7,23 +7,19 @@
       "des": "Much anticipated new release featured as main theme to hit anime's theatrical release.",
       "id": 1
     },
-    { "name": "Greatest Hits 2011-2017 Alter Ego [Regular Edition]",
-       "band": "EGOIST",
-       "price": "2778yen",
-       "des": "First greatest hits album of EGOIST featuring 15 titles (13 from anime series) in remastered edition.",       
-       "id": 2
+    {
+      "name": "Greatest Hits 2011-2017 Alter Ego [Regular Edition]",
+      "band": "EGOIST",
+      "price": "2778yen",
+      "des": "First greatest hits album of EGOIST featuring 15 titles (13 from anime series) in remastered edition.",
+      "id": 2
     },
-    { "name": "Kabaneri of the Iron Fortress [Regular Edition]",
+    {
+      "name": "Kabaneri of the Iron Fortress [Regular Edition]",
       "band": "EGOIST",
       "price": "1204yen",
       "des": "EGOIST brings the seventh single. The title song is an intro theme for the TV anime series Kabaneri of the Iron Fortress.",
       "id": 3
-    },
-    { "name": "RELOADED [Regular Edition]",
-      "band": "EGOIST",
-      "price": "1300yen",
-      "des": "New single release from Egoist is used as main theme for Project Itoh anime.",      
-      "id": 4 
     }
   ]
 }
