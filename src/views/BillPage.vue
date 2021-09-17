@@ -4,33 +4,55 @@
     <v-container class="flex">
       <v-layout column>
         <v-flex xs12 sm12 md12 lg12 class="justify-center">
-          <v-card flat class="pa-4 mt-10" color="black" width="auto" height="auto">
+          <v-card flat class="pa-4 mt-10 overflow-y-scroll" color="black" width="auto" height="600">
             <span class="text-lg white--text">SUMMARY</span>
 
             <div v-for="cInfo in cartInfo" :key="cInfo.id">
-            <v-card dark flat class="w-80 h-auto my-5" color="#C0C0C0">
-              <v-layout wrap>
-                <v-card-text class="justify-center text-sm w-40 truncate white--text">
-                  <span class=""> {{ cInfo.name }}</span>
-                </v-card-text>
+              <v-card dark flat class="w-80 h-auto my-5" color="#C0C0C0">
+                <v-layout>
+                  <v-card-text class="text-sm white--text">
+                    <ul class>
+                      <li>
+                        <span class>Order Number: {{ cInfo.id }}</span>
+                      </li>
+                      <li>
+                        <span class>Order Name: {{ cInfo.name }} By. {{ cInfo.band }}</span>
+                      </li>
+                      <!-- <li>
+                        <span class></span>
+                      </li>-->
+                      <li>
+                        <span class>Order Price: {{ cInfo.price }}</span>
+                      </li>
+                    </ul>
+                  </v-card-text>
 
-                <v-card-actions>
-                  <!-- <v-btn @click="deleteCart(cInfo.id)" color="red darken-4">
+                  <!-- <v-card-actions>
+                    <v-btn @click="deleteCart(cInfo.id)" color="red darken-4">
                       <v-icon>delete</v-icon>
-                  </v-btn>-->
-                </v-card-actions>
-              </v-layout>
-            </v-card>
+                    </v-btn>
+                  </v-card-actions>-->
+                </v-layout>
+              </v-card>
             </div>
 
             <v-card-text class="text-sm truncate white--text">
               <ul>
-                <li class="mb-2 justify-end">
-                  <span>Total Quantity:  Piece</span>
+                <li class="mb-4 justify-center">
+                  <v-btn v-on:click="countPiece()" :disabled="clickPiece" class= "mr-12">
+                    <v-icon>checklist</v-icon>              
+                  </v-btn>
+                  <span>Total Quantity: {{ totalQuantity }} Piece</span>
                 </li>
+
                 <li>
-                  <span>Total price: yen</span>
+                  <v-btn :disabled="clickPrice" class= "mr-12">
+                  <v-icon>attach_money</v-icon>
+                  <h1 v-on:click="countPrice()">{{ totalPrice }}</h1>
+                </v-btn>
+                  <span>Total Price: {{ totalPrice }} yen</span>
                 </li>
+                
               </ul>
             </v-card-text>
           </v-card>
@@ -54,7 +76,13 @@ export default {
   name: 'Bill',
   data() {
     return {
-      cartInfo: []
+      cartInfo: [],
+      totalQuantity: 0,
+      totalPrice: 0,
+      url: 'http://localhost:5001/productInfo',
+      carturl: 'http://localhost:5002/cartInfo',
+      clickPiece: false,
+      clickPrice: false
     }
   },
   components: {
@@ -62,7 +90,40 @@ export default {
 
   },
   methods: {
+    async getCartForm() {
+      try {
+        const res = await fetch(this.carturl)
+        const getcartdata = await res.json()
+        return getcartdata
+
+      }
+      catch (error) { console.log(`get summary failed: ${error}`) }
+    },
+
+    countPiece() {
+      console.log(`in loop`)
+
+      for (let i = 0; i < this.cartInfo.length; i++) {
+        this.totalQuantity += 1
+        this.clickPiece = true;
+      }
+
+    },
+
+    countPrice() {
+      console.log(`in price`)
+      for (let i = 0; i < this.cartInfo.length; i++) {
+        this.totalPrice += this.cartInfo.length
+        this.clickPrice = true;
+      }
+    },
+
+  },
+
+  async created() {
+    this.cartInfo = await this.getCartForm()
 
   }
+
 }
 </script>
