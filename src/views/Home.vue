@@ -37,11 +37,12 @@
 
                   <validation-provider v-slot="{ errors }" name="Price" rules="required|numeric">
                     <v-text-field
-                      v-model="priceForm"
+                      v-model.number="priceForm"
                       :error-messages="errors"
                       label="Price"
                       required
                       single-line
+                      type="number"
                     ></v-text-field>
                   </validation-provider>
 
@@ -141,7 +142,7 @@
     <!-- ---------------------------------------------------------------------------------------------------------- -->
     <v-container class="flex mb-40">
       <v-layout row wrap>
-        <v-flex xs12 sm6 md6 lg3 wrap v-for="uta in productInfo" :key="uta.id" justify-end>
+        <v-flex xs12 sm6 md6 lg3 wrap v-for="uta in productInfo" :key="uta.id" justify-center>
           <v-card dark flat class="pa-2 w-44 h-auto my-10">
             <v-responsive>
               <img :src="uta.file" class="w-40 h-40" />
@@ -150,7 +151,7 @@
               <ul>
                 <li>{{ uta.name }}</li>
                 <li class="pt-2">{{ uta.band }}</li>
-                <li class="pt-2">{{ uta.price }}yen</li>
+                <li class="pt-2">{{ uta.price }} yen</li>
                 <li class="pt-2">{{ uta.des }}</li>
               </ul>
             </v-card-text>
@@ -175,7 +176,7 @@
       </v-layout>
 
       <v-layout column wrap mt-8>
-        <v-flex xs12 sm6 md6 lg12 wrap class="justify-center hidden-xs-only">
+        <v-flex xs12 sm12 md12 lg12 wrap class="justify-center hidden-xs-only">
           <v-card flat class="pa-4 overflow-y-scroll" color="black" width="auto" height="400">
             <span class="text-lg white--text">CART</span>
 
@@ -333,7 +334,7 @@ export default {
 
       console.log(`productName: ${this.nameForm}`)
       console.log(`bandName: ${this.bandForm}`)
-      console.log(`productPrice: ${this.priceForm}`)
+      console.log(`productPrice: ${typeof this.priceForm}`)
       console.log(`productDes: ${this.desForm}`)
       console.log(`image: ${this.fileForm}`)
 

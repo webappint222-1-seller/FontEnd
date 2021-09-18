@@ -18,11 +18,8 @@
                       <li>
                         <span class>Order Name: {{ cInfo.name }} By. {{ cInfo.band }}</span>
                       </li>
-                      <!-- <li>
-                        <span class></span>
-                      </li>-->
                       <li>
-                        <span class>Order Price: {{ cInfo.price }}</span>
+                        <span class>Order Price: {{ cInfo.price }} yen</span>
                       </li>
                     </ul>
                   </v-card-text>
@@ -38,21 +35,31 @@
 
             <v-card-text class="text-sm truncate white--text">
               <ul>
-                <li class="mb-4 justify-center">
-                  <v-btn v-on:click="countPiece()" :disabled="clickPiece" class= "mr-12">
-                    <v-icon>checklist</v-icon>              
+                <li class= "mb-4 ml-20">
+                  <v-btn
+                    v-on:click="countPiece(), countPrice()"
+                    :disabled="click"
+                    class="mr-12"
+                    color="#FFB6C1"
+                  >
+                    <v-icon>checklist</v-icon>
                   </v-btn>
-                  <span>Total Quantity: {{ totalQuantity }} Piece</span>
                 </li>
 
-                <li>
+                <li class="mb-4 ml-10">
+                  <span>Total Quantity: {{ totalQuantity }} Piece</span>
+                </li>
+                <li class="ml-10">
+                  <span>Total Price: {{ totalPrice }} yen</span>
+                </li>
+
+                <!-- <li>
                   <v-btn :disabled="clickPrice" class= "mr-12">
                   <v-icon>attach_money</v-icon>
                   <h1 v-on:click="countPrice()">{{ totalPrice }}</h1>
                 </v-btn>
                   <span>Total Price: {{ totalPrice }} yen</span>
-                </li>
-                
+                </li>-->
               </ul>
             </v-card-text>
           </v-card>
@@ -81,8 +88,7 @@ export default {
       totalPrice: 0,
       url: 'http://localhost:5001/productInfo',
       carturl: 'http://localhost:5002/cartInfo',
-      clickPiece: false,
-      clickPrice: false
+      click: false,
     }
   },
   components: {
@@ -105,7 +111,7 @@ export default {
 
       for (let i = 0; i < this.cartInfo.length; i++) {
         this.totalQuantity += 1
-        this.clickPiece = true;
+        this.click = true;
       }
 
     },
@@ -113,8 +119,8 @@ export default {
     countPrice() {
       console.log(`in price`)
       for (let i = 0; i < this.cartInfo.length; i++) {
-        this.totalPrice += this.cartInfo.length
-        this.clickPrice = true;
+        this.totalPrice += this.cartInfo[i].price
+        this.click = true;
       }
     },
 
