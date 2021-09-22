@@ -7,7 +7,8 @@
     "build": "vue-cli-service build",
     "lint": "vue-cli-service lint",
     "backend": "json-server --watch db.json --port 5000",
-    "pbackend": "json-server --watch pdb.json --port 5001"
+    "pbackend": "json-server --watch pdb.json --port 5001",
+    "cbackend": "json-server --watch cartdb.json --port 5002"
   },
   "dependencies": {
     "@tailwindcss/postcss7-compat": "^2.0.2",
@@ -19,7 +20,8 @@
     "vue": "^2.6.11",
     "vue-router": "^3.2.0",
     "vuelidate": "^0.7.6",
-    "vuetify": "^2.4.0"
+    "vuetify": "^2.4.0",
+    "vuex": "^3.6.2"
   },
   "devDependencies": {
     "@mdi/js": "^5.9.55",

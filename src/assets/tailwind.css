@@ -19,6 +19,11 @@
         bg-silver
         w-full h-full md:w-auto
 }
+.bill {
+    @apply
+        bg-silver
+        w-full h-full md:w-auto
+}
 
 .notFound {
     @apply  bg-silver
