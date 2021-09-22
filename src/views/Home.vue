@@ -111,7 +111,7 @@
               </ul>
             </v-card-text>
 
-            <v-card-text >
+            <!-- <v-card-text>
               <validation-provider
                 v-slot="{ errors }"
                 name="Quantity"
@@ -127,14 +127,12 @@
                   class="text-xs"
                 ></v-text-field>
               </validation-provider>
-
+            </v-card-text> -->
             <v-card-actions>
               <v-btn @click="dummyProductInCart(p)" color="#FFB6C1">
                 <v-icon>shopping_cart</v-icon>
               </v-btn>
             </v-card-actions>
-            </v-card-text>
-
           </v-card>
         </v-flex>
       </v-layout>
@@ -149,20 +147,19 @@
             </v-responsive>
             <v-card-text class="justify-center text-xs break-words white--text">
               <ul>
-                <li>{{ uta.name }}</li>
-                <li class="pt-2">{{ uta.band }}</li>
+                <li>{{ uta.product_name }}</li>
+                <li class="pt-2">{{ uta.band_name }}</li>
                 <li class="pt-2">{{ uta.price }} yen</li>
-                <li class="pt-2">{{ uta.des }}</li>
+                <li class="pt-2">{{ uta.product_des }}</li>
               </ul>
             </v-card-text>
 
-            
-              <v-card-actions class="justify-center">
-                <v-btn @click.prevent="productInCart(uta)" color="#FFB6C1" small justify-end>
-                  <v-icon small>shopping_cart</v-icon>
-                </v-btn>
-              </v-card-actions>
-            
+            <v-card-actions class="justify-center">
+              <v-btn @click.prevent="productInCart(uta)" color="#FFB6C1" small justify-end>
+                <v-icon small>shopping_cart</v-icon>
+              </v-btn>
+            </v-card-actions>
+
             <v-card-actions class="justify-center">
               <v-btn @click="showProduct(uta)" color="yellow darken-4" small>
                 <v-icon small>edit</v-icon>
@@ -276,8 +273,9 @@ export default {
       editId: '',
       addCartId: '',
       i: 'https://files.catbox.moe/vq3v5e.png',
-      url: 'http://localhost:5001/productInfo',
-      carturl: 'http://localhost:5002/cartInfo'
+      // url: 'http://localhost:5001/productInfo',
+      carturl: 'http://localhost:5002/cartInfo',
+      url: 'http://localhost:3006'
 
     }
 
@@ -480,7 +478,7 @@ export default {
     // GET
     async getProductForm() {
       try {
-        const res = await fetch(this.url)
+        const res = await fetch(this.url + "/customers")
         const getdata = await res.json()
         return getdata
       }
