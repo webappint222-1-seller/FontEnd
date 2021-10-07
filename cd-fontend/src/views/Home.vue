@@ -275,7 +275,9 @@ export default {
       i: 'https://files.catbox.moe/vq3v5e.png',
       // url: 'http://localhost:5001/productInfo',
       carturl: 'http://localhost:5002/cartInfo',
+      //url: 'https://www.utastore.team:3006'
       url: 'http://localhost:3006'
+
 
     }
 
